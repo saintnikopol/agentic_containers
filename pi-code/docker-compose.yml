@@ -1,0 +1,23 @@
+services:
+  agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: iso-agent
+    working_dir: /workspace
+    volumes:
+      # Mount the current directory (which should contain the 'iso' repo)
+      - .:/workspace
+      - ./gitconfig:/root/.gitconfig
+    environment:
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
+    stdin_open: true   # keep STDIN open
+    tty: true          # allocate a pseudo-TTY
+    restart: unless-stopped
+    mem_limit: 8g
+    cpus: 4
+    security_opt:
+      - no-new-privileges:true
+    command: bash
