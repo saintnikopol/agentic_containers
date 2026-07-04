@@ -25,8 +25,17 @@ git clone https://x-access-token:${GITHUB_TOKEN}@github.com/your-org/iso.git
 cd iso
 ```
 
-Place these three files in `iso/`: `Dockerfile`, `docker-compose.yml`, and
-`.env` (copy from `.env.example`):
+Place `Dockerfile`, `docker-compose.yml`, and `.env` (copy from
+`.env.example`) in `iso/`. You can either copy them by hand, or run the
+setup script from this repo, which copies the files and merges the
+required `.gitignore` entries (`.env`, `gitconfig`) without overwriting
+`iso/`'s existing `.gitignore`:
+
+```bash
+sh /path/to/pi-code/setup.sh iso/
+```
+
+Either way, fill in `.env` with real values:
 
 ```
 GITHUB_TOKEN=github_pat_..      # your fine‑grained PAT for the target repo
@@ -34,7 +43,6 @@ OPENAI_API_KEY=sk-or..          # your OpenAI or open-router api key
 DEEPSEEK_API_KEY=sk-9b..        # deepseek API key for agent to use
 ```
 
-Create a finegrained github token, with access only to the target repo.
 Pick LLM provider of your choice. 
 
 Also create a `gitconfig` file next to `docker-compose.yml` (this is
