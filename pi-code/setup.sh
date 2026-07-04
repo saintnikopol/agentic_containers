@@ -42,10 +42,42 @@ for entry in ".env" ".env.*" "!.env.example" "gitconfig"; do
 done
 echo "Merged required entries into $TARGET/.gitignore"
 
+if [ -f "$TARGET/gitconfig" ]; then
+  echo "Skipping gitconfig (already exists in target)"
+else
+  GIT_NAME="$(git -C "$TARGET" config user.name 2>/dev/null || true)"
+  GIT_EMAIL="$(git -C "$TARGET" config user.email 2>/dev/null || true)"
+
+  if [ -n "$GIT_NAME" ] && [ -n "$GIT_EMAIL" ]; then
+    printf 'Use existing git identity "%s <%s>" for commits in the container? [Y/n] ' "$GIT_NAME" "$GIT_EMAIL"
+    read -r ans
+    case "$ans" in
+      [nN]*)
+        printf 'Name: '
+        read -r GIT_NAME
+        printf 'Email: '
+        read -r GIT_EMAIL
+        ;;
+    esac
+  else
+    echo "No existing git identity detected for $TARGET"
+    printf 'Name: '
+    read -r GIT_NAME
+    printf 'Email: '
+    read -r GIT_EMAIL
+  fi
+
+  cat > "$TARGET/gitconfig" <<EOF
+[user]
+    name = $GIT_NAME
+    email = $GIT_EMAIL
+EOF
+  echo "Created $TARGET/gitconfig with identity \"$GIT_NAME <$GIT_EMAIL>\""
+fi
+
 cat <<EOF
 
 Next steps:
   1. Edit $TARGET/.env with your real GITHUB_TOKEN / API keys
-  2. Create $TARGET/gitconfig with your git identity (see README)
-  3. cd $TARGET && docker compose build && docker compose up -d
+  2. cd $TARGET && docker compose build && docker compose up -d
 EOF

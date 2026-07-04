@@ -25,15 +25,22 @@ git clone https://x-access-token:${GITHUB_TOKEN}@github.com/your-org/iso.git
 cd iso
 ```
 
-Place `Dockerfile`, `docker-compose.yml`, and `.env` (copy from
-`.env.example`) in `iso/`. You can either copy them by hand, or run the
-setup script from this repo, which copies the files and merges the
-required `.gitignore` entries (`.env`, `gitconfig`) without overwriting
-`iso/`'s existing `.gitignore`:
+Place `Dockerfile`, `docker-compose.yml`, `.env` (copy from
+`.env.example`), and `gitconfig` in `iso/`. You can either create them by
+hand, or run the setup script from this repo:
 
 ```bash
 sh /path/to/pi-code/setup.sh iso/
 ```
+
+It copies the Dockerfile/compose files, merges the required `.gitignore`
+entries (`.env`, `gitconfig`) into `iso/`'s existing `.gitignore` without
+overwriting it, and prompts to create `gitconfig` — offering your current
+git identity (`user.name`/`user.email`) as the default, or letting you
+enter a different name/email if you want the container to commit as
+someone else. `gitconfig` is bind-mounted into the container as
+`/home/node/.gitconfig` so commits have an author identity, and it's
+gitignored so it stays local to your machine.
 
 Either way, fill in `.env` with real values:
 
@@ -44,18 +51,6 @@ DEEPSEEK_API_KEY=sk-9b..        # deepseek API key for agent to use
 ```
 
 Pick LLM provider of your choice. 
-
-Also create a `gitconfig` file next to `docker-compose.yml` (this is
-bind-mounted into the container as `/home/node/.gitconfig` so commits have
-an author identity — it's gitignored, so it stays local to your machine):
-
-```bash
-cat > gitconfig <<'EOF'
-[user]
-    name = Your Name
-    email = you@example.com
-EOF
-```
 
 Build and run:
 ```bash
