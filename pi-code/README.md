@@ -25,14 +25,9 @@ git clone https://x-access-token:${GITHUB_TOKEN}@github.com/your-org/iso.git
 cd iso
 ```
 
-Place these three files in `iso/`:
+Place these three files in `iso/`: `Dockerfile`, `docker-compose.yml`, and
+`.env` (copy from `.env.example`):
 
-**`Dockerfile`**
-```
-
-**`docker-compose.yml`**
-
-**`.env`** (copy from .env.example)
 ```
 GITHUB_TOKEN=github_pat_..      # your fine‑grained PAT for the target repo
 OPENAI_API_KEY=sk-or..          # your OpenAI or open-router api key
@@ -84,4 +79,3 @@ gh pr create --title "Feature" --body "Automated PR" --base main
 ---
 
 That’s it – secure, focused, and ready for your agent.
-```
