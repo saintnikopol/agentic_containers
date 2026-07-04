@@ -43,8 +43,8 @@ Create a finegrained github token, with access only to the target repo.
 Pick LLM provider of your choice. 
 
 Also create a `gitconfig` file next to `docker-compose.yml` (this is
-bind-mounted into the container as `/root/.gitconfig` so commits have an
-author identity — it's gitignored, so it stays local to your machine):
+bind-mounted into the container as `/home/node/.gitconfig` so commits have
+an author identity — it's gitignored, so it stays local to your machine):
 
 ```bash
 cat > gitconfig <<'EOF'

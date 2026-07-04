@@ -8,7 +8,7 @@ services:
     volumes:
       # Mount the current directory (which should contain the 'iso' repo)
       - .:/workspace
-      - ./gitconfig:/root/.gitconfig
+      - ./gitconfig:/home/node/.gitconfig
     environment:
       GITHUB_TOKEN: ${GITHUB_TOKEN}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
@@ -18,6 +18,9 @@ services:
     restart: unless-stopped
     mem_limit: 8g
     cpus: 4
+    pids_limit: 512
     security_opt:
       - no-new-privileges:true
+    cap_drop:
+      - ALL
     command: bash
